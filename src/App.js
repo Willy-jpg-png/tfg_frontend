@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LoginScreen from "./components/LoginScreen";
+import SignUpForm from "./components/SignUpForm";
+import CustomerDashboard from "./components/CustomerDashboard";
+import RestaurantDashboard from "./components/RestaurantDashboard";
+import DeliveryPersonDashboard from "./components/DeliveryPersonDashboard";
+import RestaurantProducts from "./components/RestaurantProducts";
+import { CartProvider } from "./context/CartContext"; // ⬅️ Añadir esto
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <CartProvider> {/* ⬅️ Envuelve toda la app */}
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<LoginScreen />} />
+                    <Route path="/register" element={<SignUpForm />} />
+                    <Route path="/dashboard/customer" element={<CustomerDashboard />} />
+                    <Route path="/dashboard/restaurant" element={<RestaurantDashboard />} />
+                    <Route path="/dashboard/deliveryPerson" element={<DeliveryPersonDashboard />} />
+                    <Route path="/restaurants/:restaurantId/products" element={<RestaurantProducts />} />
+                </Routes>
+            </BrowserRouter>
+        </CartProvider>
+    );
 }
 
 export default App;
