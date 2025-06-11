@@ -18,12 +18,10 @@ export default function LoginScreen() {
         try {
             const user = await login(form);
 
-            // Guardar en localStorage
             localStorage.setItem('userId', user.id);
             localStorage.setItem('username', user.username);
             localStorage.setItem('role', user.role);
 
-            // 🔁 Redirigir según el rol
             if (user.role === 'CUSTOMER') {
                 navigate('/dashboard/customer');
             } else if (user.role === 'RESTAURANT') {

@@ -1,3 +1,4 @@
+// ... imports ...
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchRestaurantProducts } from "../services/productService";
@@ -40,7 +41,17 @@ export default function RestaurantProducts() {
     const totalPages = Math.ceil(totalElements / pageSize);
 
     const handleAdd = (product) => {
-        addToCart(product);
+        const newCartItem = {
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            basePrice: product.price,
+            image: product.image,
+            addings: [],
+        };
+
+        addToCart(newCartItem);
         setLastAdded(product.name);
         setTimeout(() => setLastAdded(null), 2500);
     };
@@ -51,16 +62,23 @@ export default function RestaurantProducts() {
     };
 
     const handleConfirmAddings = (selectedAddings) => {
-        const addingsTotal = selectedAddings.reduce((sum, a) => sum + a.price, 0);
-        const fullPrice = activeProduct.price + addingsTotal;
-
-        addToCart({
-            ...activeProduct,
+        const newCartItem = {
+            id: activeProduct.id,
+            name: activeProduct.name,
+            description: activeProduct.description,
+            price: activeProduct.price,
+            basePrice: activeProduct.price,
+            image: activeProduct.image,
             addings: selectedAddings,
-            price: fullPrice,
-        });
+        };
 
-        setLastAdded(`${activeProduct.name} + addings`);
+        addToCart(newCartItem);
+
+        setLastAdded(
+            selectedAddings.length > 0
+                ? `${activeProduct.name} + suplementos`
+                : activeProduct.name
+        );
         setShowAddingsModal(false);
         setTimeout(() => setLastAdded(null), 2500);
     };
@@ -76,16 +94,10 @@ export default function RestaurantProducts() {
 
     return (
         <>
-            {/* Botón de volver */}
-            <button
-                onClick={handleBack}
-                className="fixed top-5 left-5 z-50 bg-blue-600 text-white px-3 py-2 rounded-full shadow-lg hover:bg-blue-700 transition text-lg"
-                title="Volver"
-            >
+            <button onClick={handleBack} className="fixed top-5 left-5 z-50 bg-blue-600 text-white px-3 py-2 rounded-full shadow-lg hover:bg-blue-700 transition text-lg">
                 ←
             </button>
 
-            {/* Popup de añadido */}
             {lastAdded && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
                     <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg text-lg font-medium animate-bounce pointer-events-auto">
@@ -96,7 +108,6 @@ export default function RestaurantProducts() {
 
             <div className="min-h-screen bg-gradient-to-br from-blue-100 to-emerald-100 px-4 py-8 relative">
                 <CartPanel />
-
                 <div className="max-w-4xl mx-auto bg-white p-6 rounded-2xl shadow-xl mr-72 min-h-[500px]">
                     <h1 className="text-3xl font-bold text-center text-blue-700 mb-6">
                         Productos del restaurante

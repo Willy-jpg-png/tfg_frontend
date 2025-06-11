@@ -11,3 +11,13 @@ export async function fetchProductAddings(restaurantId, productId, pageNumber = 
     );
     return response.data;
 }
+
+export async function fetchRestaurantAddings(restaurantId, pageNumber = 0, pageSize = 5) {
+    const response = await axios.get(
+        `${API_BASE_URL}/v1/rep-eat/restaurant/${restaurantId}/addings`,
+        {
+            params: { pageNumber, pageSize },
+        }
+    );
+    return response.data;
+}

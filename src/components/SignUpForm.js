@@ -6,25 +6,20 @@ import {
 } from "../services/userService";
 import { login } from "../services/authService";
 import { useNavigate } from "react-router-dom";
+import LocationPickerMap from "./LocationPickerMap";
 
 const initialForms = {
-    customer: { username: "", name: "", password: "", email: "", address: "" },
+    customer: {
+        username: "", name: "", password: "", email: "",
+        street: "", number: "", floor: "", latitude: null, longitude: null
+    },
     restaurant: {
-        username: "",
-        name: "",
-        password: "",
-        email: "",
-        address: "",
-        description: "",
-        phone: "",
-        website: "",
+        username: "", name: "", password: "", email: "",
+        street: "", number: "", floor: "", description: "",
+        phone: "", website: "", latitude: null, longitude: null
     },
     deliveryPerson: {
-        username: "",
-        name: "",
-        password: "",
-        email: "",
-        photo: "",
+        username: "", name: "", password: "", email: "", photo: ""
     },
 };
 
@@ -32,7 +27,7 @@ export default function SignUpForm() {
     const [userType, setUserType] = useState("customer");
     const [form, setForm] = useState(initialForms["customer"]);
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false); // 👁 mostrar u ocultar
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
@@ -83,6 +78,8 @@ export default function SignUpForm() {
         }
     };
 
+    const isMapUser = userType === "customer" || userType === "restaurant";
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-100 to-blue-100 px-4">
             <div className="w-full max-w-2xl bg-white p-8 rounded-3xl shadow-2xl space-y-6 my-12">
@@ -105,7 +102,12 @@ export default function SignUpForm() {
 
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
                     {Object.keys(form).map((key) => {
-                        if (key === "password") return null; // lo colocamos manualmente más abajo
+                        if (
+                            key === "password" ||
+                            key === "latitude" ||
+                            key === "longitude"
+                        ) return null;
+
                         return (
                             <input
                                 key={key}
@@ -120,7 +122,6 @@ export default function SignUpForm() {
                         );
                     })}
 
-                    {/* Campo de contraseña */}
                     <div className="relative">
                         <input
                             name="password"
@@ -140,7 +141,6 @@ export default function SignUpForm() {
                         </button>
                     </div>
 
-                    {/* Confirmar contraseña */}
                     <div className="relative">
                         <input
                             name="confirmPassword"
@@ -159,6 +159,19 @@ export default function SignUpForm() {
                             {showPassword ? "Ocultar" : "Mostrar"}
                         </button>
                     </div>
+
+                    {isMapUser && (
+                        <>
+                            <h3 className="text-lg font-semibold text-blue-700 mt-4">
+                                Selecciona tu ubicación en el mapa
+                            </h3>
+                            <LocationPickerMap
+                                onLocationSelect={({ latitude, longitude }) =>
+                                    setForm((prev) => ({ ...prev, latitude, longitude }))
+                                }
+                            />
+                        </>
+                    )}
 
                     <button
                         type="submit"

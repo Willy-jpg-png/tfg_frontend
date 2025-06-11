@@ -12,3 +12,21 @@ export async function fetchRestaurantProducts(restaurantId, pageNumber = 0, page
 
     return await res.json();
 }
+
+export async function updateProduct(restaurantId, productId, data) {
+    const res = await fetch(`${API_BASE_URL}/v1/rep-eat/restaurant/${restaurantId}/product/${productId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    });
+
+    if (!res.ok) throw new Error("Error al actualizar el producto");
+}
+
+export async function deleteProduct(restaurantId, productId) {
+    const res = await fetch(`${API_BASE_URL}/v1/rep-eat/restaurant/${restaurantId}/product/${productId}`, {
+        method: "DELETE",
+    });
+
+    if (!res.ok) throw new Error("Error al eliminar el producto");
+}

@@ -5,11 +5,11 @@ import CustomerDashboard from "./components/CustomerDashboard";
 import RestaurantDashboard from "./components/RestaurantDashboard";
 import DeliveryPersonDashboard from "./components/DeliveryPersonDashboard";
 import RestaurantProducts from "./components/RestaurantProducts";
-import { CartProvider } from "./context/CartContext"; // ⬅️ Añadir esto
+import { CartProvider } from "./context/CartContext";
 
 function App() {
     return (
-        <CartProvider> {/* ⬅️ Envuelve toda la app */}
+        <CartProvider>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<LoginScreen />} />

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="infrastructure-1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../tfg/infrastructure/target/infrastructure-1.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

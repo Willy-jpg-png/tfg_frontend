@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchRestaurants } from "../services/restaurantService";
-import UserPanel from "./UserPanel";
+import UserPanelWrapper from "./UserPanelWrapper";
 
 export default function CustomerDashboard() {
     const navigate = useNavigate();
@@ -42,7 +42,7 @@ export default function CustomerDashboard() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-emerald-100 to-blue-100 px-4 py-8 relative">
-            <UserPanel />
+            <UserPanelWrapper />
 
             <div className="max-w-4xl bg-white p-6 rounded-2xl shadow-xl mr-72">
                 <h1 className="text-3xl font-bold text-center text-blue-700 mb-6">
@@ -61,7 +61,10 @@ export default function CustomerDashboard() {
                             <li
                                 key={r.id}
                                 className="border p-4 rounded-lg shadow-sm hover:bg-blue-50 cursor-pointer transition"
-                                onClick={() => navigate(`/restaurants/${r.id}/products`)}
+                                onClick={() => {
+                                    localStorage.setItem("restaurantId", r.id);
+                                    navigate(`/restaurants/${r.id}/products`);
+                                }}
                             >
                                 <h2 className="text-xl font-semibold text-emerald-600">{r.name}</h2>
                                 <p className="text-gray-600">{r.description}</p>

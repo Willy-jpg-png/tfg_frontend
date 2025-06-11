@@ -6,13 +6,24 @@ export function CartProvider({ children }) {
     const [cart, setCart] = useState([]);
 
     const generateItemKey = (product) => {
-        const base = product.id;
-        const addings = product.addings?.map((a) => a.id).sort().join(",") || "";
+        const base = product.id ?? "null";
+        const addings = (product.addings || [])
+            .map((a) => a?.id)
+            .filter((id) => id !== undefined && id !== null)
+            .sort()
+            .join(",");
         return `${base}-${addings}`;
     };
 
+    const deepCloneProduct = (product) => ({
+        ...product,
+        addings: product.addings ? product.addings.map((a) => ({ ...a })) : [],
+    });
+
     const addToCart = (newProduct) => {
-        const newKey = generateItemKey(newProduct);
+        const clonedProduct = deepCloneProduct(newProduct);
+        const newKey = generateItemKey(clonedProduct);
+
         setCart((prev) => {
             const existing = prev.find((item) => generateItemKey(item.product) === newKey);
             if (existing) {
@@ -22,7 +33,7 @@ export function CartProvider({ children }) {
                         : item
                 );
             } else {
-                return [...prev, { product: newProduct, quantity: 1 }];
+                return [...prev, { product: clonedProduct, quantity: 1 }];
             }
         });
     };
@@ -47,8 +58,7 @@ export function CartProvider({ children }) {
 
     const clearCart = () => setCart([]);
 
-    const getTotalItems = () =>
-        cart.reduce((acc, item) => acc + item.quantity, 0);
+    const getTotalItems = () => cart.reduce((acc, item) => acc + item.quantity, 0);
 
     return (
         <CartContext.Provider

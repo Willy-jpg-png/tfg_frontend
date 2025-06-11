@@ -12,10 +12,10 @@ export default function ProductAddingsModal({ restaurantId, productId, basePrice
             try {
                 const data = await fetchProductAddings(restaurantId, productId);
                 setAddings(data.content || []);
-                setLoading(false);
             } catch (err) {
                 console.error("Error al cargar addings:", err.response?.data || err.message);
-                setError("No se pudieron cargar los addings.");
+                setError("No se pudieron cargar los suplementos.");
+            } finally {
                 setLoading(false);
             }
         };
